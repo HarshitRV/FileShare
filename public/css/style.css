@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+*/ *,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    font: inherit;
+    color: #000;
+    outline: none;
+}
+
+a:hover {
+    color: var(--text-color);
+}
+
+:root {
+    --background-color: #FAFAFA;
+    --body-font-family: 'Bebas Neue', cursive;
+    --light-grey: #EBEBEB;
+    --accent-color: #1363DF;
+    --text-color: #06283D;
+}
+
+button,
+input {
+    font-size: 3rem;
+    font: inherit;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    /* padding: 10px 30px; */
+    box-sizing: border-box;
+}
+
+
+body {
+    height: 100%;
+    font-family: var(--body-font-family);
+    color: var(--text-color);
+    font-size: 2rem;
+    background: linear-gradient(90deg, #1CB5E0 0%, #000851 140%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    /* border: 1px solid #ccc; */
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    color: #000;
+}
+
+#container {
+    width: 85%;
+    margin: auto;
+    margin-top: 10%;
+    max-width: 2000px;
+}
+
+@media screen and (min-width: 880px) {
+    #container {
+        width: 50%;
+    }
+}
+
+.file-share {
+}
+
+.file-share__heading {
+    font-size: 5rem;
+    color: #000;
+}
+
+.file-share__file-label {
+    margin: 10px 0;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    color: var(--dark-color-lighter);
+}
+
+.file-share__file-input > input {
+    height: 5rem;
+    font-weight: 400;
+    background-color: var(--light-grey);
+    opacity: 70%;
+    border-radius: 22px;
+    margin: 30px 0 30px 0;
+    padding-left: 30px;
+    /* font-size: 1rem; */
+}
+
+.file-share__file, .file-share__password, .file-share__button{
+    display: grid;
+    margin: 1rem auto;
+}
+
+#file {
+    width: 100%;
+}
+
+#password {
+}
+
+.file-share__button{
+    background-color: var(--accent-color);
+    color: var(--background-color);
+    filter: drop-shadow(0px 4px 50px rgba(0, 0, 0, 0.25));
+    border-radius: 22px;
+    padding: 1rem;
+    font-size: 1.5rem;
+}
+
+button {
+    border-radius: 1px;
+}

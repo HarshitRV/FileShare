@@ -4,23 +4,40 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
     <title>File Share</title>
 </head>
 <body>
-    <h1>Welcome to fileshare.</h1>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <label for="file">File:</label>
-        <input type="file" name="file" id="file" required>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-        <button type="submit">Genrate share link</button>
-    </form>
-  
-    <% if(fileLink != null){%>
-        <div>
-            Your file is uploaded to <br>
-            <a href="<%= fileLink %>"><%= fileLink %></a>
+    <div id="container">
+        <div class="file-share">
+            <h1 class="file-share__heading">Welcome to fileshare.</h1>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="file-share__file">
+                    <div class="file-share__file-label"><label for="file" id="file">File:</label></div>
+                    <label class="custom-file-upload">
+                        <input type="file" name="file" id="file" required>
+                        <i class="fa fa-cloud-upload"></i> Custom Upload
+                    </label>
+                </div>
+                <div class="file-share__password">
+                    <div class="file-share__file-label"><label for="password">Password</label></div>
+                    <div class="file-share__file-input"><input type="password" name="password" id="password"></div>
+                </div>
+                <div class="">
+                    <button type="submit" class="file-share__button">Genrate share link</button>
+                </div>
+            </form>
         </div>
-    <% } %>  
+        <% if(fileLink != null){%>
+            <div>
+                Your file is uploaded to <br>
+                <a href="<%= fileLink %>"><%= fileLink %></a>
+            </div>
+        <% } %>
+    </div>
+    
 </body>
 </html>

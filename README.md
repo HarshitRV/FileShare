@@ -22,5 +22,5 @@ MONGODB_ONLINE_URI=<Add this if you intend to host this app online>
 
 4. Run the app:
 ```sh
-npm start
+npm run devstart
 ```

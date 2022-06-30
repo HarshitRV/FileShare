@@ -17,12 +17,16 @@ const genDownloadLink = async (req, res, _ ) => {
             const match = await file.checkPassword(req.body.password);
             if(!match) return res.render("password");
             
+            file.downloadCount += 1;
+            await file.save();
+
             return res.download(file.path, file.originalname);
         }
     } 
-    
+    file.downloadCount += 1;
+    await file.save();
+
     return res.download(file.path, file.originalname);
-    
 }
 
 module.exports = genDownloadLink;

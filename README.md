@@ -1,10 +1,6 @@
 # FileShare App
 This NodeJS app let't you upload files and generate a link to download them.
 The generated links can be password protected as well.
-## Prerequisites
-1. NodeJS v16.x
-2. MongoDB
-3. MongoDB Compass(optional)
 
 # Setting up the app locally
 1. Install dependencies:

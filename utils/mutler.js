@@ -1,7 +1,6 @@
 const multer = require("multer");
-
+const storage = multer.memoryStorage();
 const multerConfigs = {
-    dest: 'uploads/',
     limits: {
         fileSize: 1500000
     },
@@ -10,7 +9,8 @@ const multerConfigs = {
             return cb(new Error("Supported file types are pdf, doc, docx and txt"));
         }
         cb(undefined, true);
-    }
+    },
+    storage
 }
 
 module.exports.upload = multer(multerConfigs);

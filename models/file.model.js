@@ -9,12 +9,25 @@ const bcrypt = require("bcrypt");
  * File schema.
  */
 const fileSchema = new Schema({
-    path: {
-        type: String,
-        required: true
+    fieldname: {
+        type: String
     },
     originalname: {
         type: String,
+        required: true
+    },
+    encoding: {
+        type: String
+    },
+    mimetype: {
+        type: String
+    },
+    buffer: {
+        type: Buffer,
+        required: true
+    },
+    size: {
+        type: Number,
         required: true
     },
     password: {

@@ -41,6 +41,7 @@ app.use('/', FileRouter);
  */
 app.route("/").get((req, res) => {
     res.render("home", {
+        message : null,
         fileLink: null
     });
 });

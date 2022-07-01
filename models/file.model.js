@@ -9,6 +9,9 @@ const bcrypt = require("bcrypt");
  * File schema.
  */
 const fileSchema = new Schema({
+    shortUrl: {
+        type: String
+    },
     fieldname: {
         type: String
     },

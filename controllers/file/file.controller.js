@@ -12,6 +12,7 @@ const File = require("../../models/file.model");
  * Utils imports.
  */
 const catchAsync = require("../../utils/catchAsync");
+const getTinyUrl = require("../../utils/urlShortner");
 
 /**
  * @description - This function is used to upload files.
@@ -36,7 +37,7 @@ module.exports.uploadFile = catchAsync(async (req, res, next) => {
     });
 
     if(existingFile){
-        const fileLink = `${req.headers.origin}/file/${existingFile._id}`;
+        const fileLink = existingFile.shortUrl;
 
         return res.render('home', {
             message: `File with name ${fileData.originalname} already exists at`,
@@ -49,9 +50,13 @@ module.exports.uploadFile = catchAsync(async (req, res, next) => {
     }
 
     const file = new File(fileData);
+    
+    const fileLink = await getTinyUrl(
+        process.env.ACCESS_TOKEN, 
+        `${req.headers.origin}/file/${file._id}`
+    );
+    file.shortUrl = fileLink;
     await file.save();
-
-    const fileLink = `${req.headers.origin}/file/${file._id}`;
 
     return res.render("home", {
         message: "Your file is uploaded to",

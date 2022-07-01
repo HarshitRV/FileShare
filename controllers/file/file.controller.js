@@ -109,7 +109,7 @@ module.exports.deleteUploads = async (req, res) => {
         
     } else {
         return res.status(200).send({
-            message: "Uploads folder does not exists"
+            message: "Uploads folder cleared"
         })
     }
 }

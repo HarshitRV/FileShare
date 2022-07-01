@@ -3,6 +3,7 @@ playground/
 uploads/
 *.env
 .DS_Store
+views/
 # Logs
 logs
 *.log

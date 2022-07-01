@@ -23,8 +23,12 @@
                     </label>
                 </div>
                 <div class="file-share__password">
-                    <div class="file-share__file-label"><label for="password">Password</label></div>
+                    <div class="file-share__file-label"><label for="password">Password<sup class="file-share--note"> *password protect your link (optional)</sup></label></div>
                     <div class="file-share__file-input"><input type="password" name="password" id="password"></div>
+                </div>
+                <div class="file-share__password">
+                    <div class="file-share__file-label"><label for="uploadPin">Upload PIN<sup class="file-share--note">*required pin for uploading files</sup></label></div>
+                    <div class="file-share__file-input"><input type="password" name="uploadPin" id="uploadPin" required></div>
                 </div>
                 <div class="">
                     <button type="submit" class="file-share__button">Genrate share link</button>

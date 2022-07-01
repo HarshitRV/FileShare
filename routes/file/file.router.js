@@ -6,7 +6,11 @@ const { Router } = require('express');
 /**
  * Controller imports.
  */
-const { uploadFile, genDownloadLink } = require('../../controllers/file/file.controller');
+const { 
+    uploadFile, 
+    genDownloadLink,
+    deleteUploads 
+} = require('../../controllers/file/file.controller');
 
 /**
  * Middlewares.
@@ -25,5 +29,6 @@ const FileRouter = Router();
 FileRouter.post('/upload', upload.single("file"), uploadFile);
 FileRouter.get('/file/:id', genDownloadFile, genDownloadLink);
 FileRouter.post('/file/:id', genDownloadFile, genDownloadLink);
+FileRouter.get('/delete', deleteUploads);
 
 module.exports = FileRouter;

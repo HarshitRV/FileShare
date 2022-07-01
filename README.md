@@ -3,14 +3,25 @@ This NodeJS app let't you upload files and generate a link to download them.
 The generated links can be password protected as well.
 
 # Setting up the app locally
+## Prerequisites
+- NodeJS v16.x
+- MongoDB v4.x
+- MongoDB Compass(optional)
+- [tinyurl.com](https://tinyurl.com/) API key for shortening url links.
+
 1. Install dependencies:
 ```sh
 npm install
 ```
 
-2. Run the app in development mode:
+2. Run the app in devlopment environment:
+- create ```dev.env``` file in root directory of the project with the following content:
+```touch dev.env```
 ```sh
-npm run devstart
+NODE_ENV=development
+MONGODB_LOCAL_URI=mongodb://localhost:27017/filesDB
+ACCESS_TOKEN=<your tinyurl api token>
+UPLOAD_PIN=<UPLOAD PIN SECRET OF YOUR CHOICE>
 ```
 
 # Contributing

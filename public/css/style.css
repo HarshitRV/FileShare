@@ -89,7 +89,12 @@ input[type="file"] {
     }
 }
 
-.file-share {
+
+.file-share--note {
+    font-size: 15px;
+    font-style: italic;
+    text-transform: lowercase;
+    color: white;
 }
 
 .file-share__heading {

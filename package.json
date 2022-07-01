@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "devstart": "env-cmd -f ./configs/dev.env nodemon server.js",
+    "devstart": "env-cmd -f ./dev.env nodemon server.js",
     "prodstart": "env-cmd -f ./prod.env nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

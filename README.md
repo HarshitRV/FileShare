@@ -23,7 +23,10 @@ MONGODB_LOCAL_URI=mongodb://localhost:27017/filesDB
 ACCESS_TOKEN=<your tinyurl api token>
 UPLOAD_PIN=<UPLOAD PIN SECRET OF YOUR CHOICE>
 ```
-
+3. Finally start the app
+```sh
+npm run devstart
+```
 # Contributing
 - Read the [Code of Conduct](./docs/code-of-conduct.md) first.
 - Contibuting [guidelines](./docs/contributing/contributing.md)

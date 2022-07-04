@@ -2,7 +2,7 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const multerConfigs = {
     limits: {
-        fileSize: 1500000
+        fileSize: 5000000
     },
     fileFilter(req, file, cb) {            
         if (!file.originalname.match(/\.(pdf|doc|docx|txt|zip)$/)) {

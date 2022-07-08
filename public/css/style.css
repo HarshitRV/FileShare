@@ -130,7 +130,9 @@ input[type="file"] {
     width: 100%;
 }
 
-#password {
+.flash {
+    text-align: center;
+    margin: 1rem;
 }
 
 .file-share__button{

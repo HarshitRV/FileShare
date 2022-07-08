@@ -1,48 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<% layout('layouts/boilerplate') %>
 
-    <link rel="icon" href="/images/android-chrome-512x512.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-
-    <title>File Share</title>
-</head>
-<body>
-    <div id="container">
-        <% if(fileLink != null){%>
+<div id="container">
+    <% if(fileLink !=null){%>
+        <div>
+            <p><%= message %></p> 
             <div>
-                <%= message %>  <br>
-                <a href="<%= fileLink %>"><%= fileLink %></a>
+                <a href="<%= fileLink %>"> 🔗 <%= fileLink %></a>
             </div>
-        <% } %>
-        <div class="file-share">
-            <h1 class="file-share__heading">Welcome to fileshare.</h1>
-            <form action="/upload" method="post" enctype="multipart/form-data">
-                <div class="file-share__file">
-                    <div class="file-share__file-label"><label for="file" id="file">File:</label></div>
-                    <label class="custom-file-upload">
-                        <input type="file" name="file" id="file" required>
-                        <i class="fa fa-cloud-upload"></i> Custom Upload
+        </div>
+    <% } %>
+    <div class="file-share">
+        <h1 class="file-share__heading">Welcome to fileshare 📁</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <div class="file-share__file">
+                <div class="file-share__file-label"><label for="file" id="file">File:</label></div>
+                <label class="custom-file-upload">
+                    <input type="file" name="file" id="file" required>
+                    <i class="fa fa-cloud-upload"></i> Custom Upload
+                </label>
+            </div>
+            <div class="file-share__password">
+                <div class="file-share__file-label">
+                    <label for="password">Password
+                        <sup class="file-share--note">*password protect your link (optional)</sup>
                     </label>
                 </div>
-                <div class="file-share__password">
-                    <div class="file-share__file-label"><label for="password">Password<sup class="file-share--note"> *password protect your link (optional)</sup></label></div>
-                    <div class="file-share__file-input"><input type="password" name="password" id="password"></div>
+                <div class="file-share__file-input">
+                    <input type="password" name="password" id="password" placeholder="optional password to password protect links">
                 </div>
-                <div class="file-share__password">
-                    <div class="file-share__file-label"><label for="uploadPin">Enter Upload PIN<sup class="file-share--note">*required pin for uploading files</sup></label></div>
-                    <div class="file-share__file-input"><input type="password" name="uploadPin" id="uploadPin" required></div>
+            </div>
+            <div class="file-share__password">
+                <div class="file-share__file-label">
+                    <label for="uploadPin">Enter Upload PIN
+                        <sup class="file-share--note">*required pin if files are larger than 1MB</sup>
+                    </label>
                 </div>
-                <div class="">
-                    <button type="submit" class="file-share__button">Generate share link</button>
+                <div class="file-share__file-input">
+                    <input type="password" name="uploadPin" id="uploadPin" placeholder="required for file uplods larger than 1mb">
                 </div>
-            </form>
-        </div>
+            </div>
+            <div class="">
+                <button type="submit" class="file-share__button">Generate share link 🔗</button>
+            </div>
+        </form>
     </div>
-    
-</body>
-</html>
+</div>

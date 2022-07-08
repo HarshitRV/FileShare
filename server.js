@@ -5,12 +5,19 @@ const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
+const session = require("express-session");
+const flash = require("connect-flash");
 
 /**
  * Utils import.
  */
 const connectDB = require("./utils/connectDB");
 const ServerError = require("./utils/ServerError");
+
+/**
+ * Configs import
+ */
+const { sessionConfig } = require("./configs/config");
 
 /**
  * Declarations.
@@ -30,6 +37,16 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(session(sessionConfig));
+app.use(flash());
+/**
+ * Setting global variables
+ */
+ app.use(async (req, res, next)=>{
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
 
 /**
  * Routes middleware.

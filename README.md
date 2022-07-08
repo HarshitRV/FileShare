@@ -22,6 +22,7 @@ NODE_ENV=development
 MONGODB_LOCAL_URI=mongodb://localhost:27017/filesDB
 ACCESS_TOKEN=<your tinyurl api token>
 UPLOAD_PIN=<UPLOAD PIN SECRET OF YOUR CHOICE>
+SIGN_COOKIE=<ANY SECRET KEY OF YOUR CHOICE>
 ```
 3. Finally start the app
 ```sh

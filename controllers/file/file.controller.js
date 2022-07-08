@@ -1,9 +1,4 @@
 /**
- * Node modules.
- */
-const fs = require("fs");
-
-/**
  * Model import.
  */
 const File = require("../../models/file.model");
@@ -13,6 +8,7 @@ const File = require("../../models/file.model");
  */
 const catchAsync = require("../../utils/catchAsync");
 const getTinyUrl = require("../../utils/urlShortner");
+const deleteUploads = require("../../utils/deleteUploads");
 
 /**
  * @description - This function is used to upload files.
@@ -20,16 +16,19 @@ const getTinyUrl = require("../../utils/urlShortner");
 module.exports.uploadFile = catchAsync(async (req, res, next) => {
     
     const { password, uploadPin } = req.body;
-
-    if(!uploadPin) return res.status(400).send({
-        message: "Upload pin is required"
-    })
-
-    if(uploadPin !== process.env.UPLOAD_PIN) return res.status(400).send({
-        message: "Upload pin is invalid"
-    })
-
     const fileData = req.file;
+
+    if(fileData.size > 1000000){
+        if(!uploadPin) {
+            req.flash("error", "File size is too large. Upload pin is required to upload files greater than 1MB.");
+            return res.redirect("/");
+        }
+        
+        if(uploadPin !== process.env.UPLOAD_PIN) {
+            req.flash("error", "Expired upload pin.");
+            return res.redirect("/");
+        }
+    }
 
     // Check if file is already exists.
     const existingFile = await File.findOne({
@@ -40,7 +39,7 @@ module.exports.uploadFile = catchAsync(async (req, res, next) => {
         const fileLink = existingFile.shortUrl;
 
         return res.render('home', {
-            message: `File with name ${fileData.originalname} already exists at`,
+            message: `File with name ${fileData.originalname} already exists at ⬇️`,
             fileLink
         });
     };
@@ -57,18 +56,19 @@ module.exports.uploadFile = catchAsync(async (req, res, next) => {
     );
     file.shortUrl = fileLink;
     await file.save();
-
+        
     return res.render("home", {
         message: "Your file is uploaded to",
         fileLink
     });
 });
 
+
 /**
  * @description -  This function is used to generate download link.
  * 
  */
-module.exports.genDownloadLink = async (req, res, _ ) => {
+module.exports.genDownloadLink = catchAsync(async (req, res, _ ) => {
     const {
         file,
         downloadPath,
@@ -77,44 +77,28 @@ module.exports.genDownloadLink = async (req, res, _ ) => {
 
     if(file.password != null){
         if(req.body.password == null){
+            req.flash("error", "Password is required to download this file.");
             return res.render("password")
         } else {
             const match = await file.checkPassword(req.body.password);
-            if(!match) return res.render("password");
+            if(!match) {
+                req.flash("error", "Password is incorrect.");
+                return res.render("password")
+            };
             
             file.downloadCount += 1;
             await file.save();
 
+            setTimeout(deleteUploads, 5000);
+            
             return res.download(downloadPath, originalname);
         }
     } 
 
     file.downloadCount += 1;
     await file.save();
+
+    setTimeout(deleteUploads, 5000);
     
     return res.download(downloadPath, originalname);
-}
-
-/**
- * @description - This function is used to delte the uploads folder
- * if it exists.
- */
-module.exports.deleteUploads = async (req, res) => {
-    if(fs.existsSync('./uploads')){
-        fs.rm('./uploads', { recursive: true }, (err)=>{
-            if(err) return res.status(500).send({
-                message: "Error while deleting uploads folder",
-                err
-            })
-
-            return res.status(200).send({
-                message: "Uploads folder is deleted"
-            })
-        });
-        
-    } else {
-        return res.status(200).send({
-            message: "Uploads folder cleared"
-        })
-    }
-}
+});

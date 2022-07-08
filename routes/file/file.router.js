@@ -9,7 +9,6 @@ const { Router } = require('express');
 const { 
     uploadFile, 
     genDownloadLink,
-    deleteUploads 
 } = require('../../controllers/file/file.controller');
 
 /**
@@ -27,8 +26,8 @@ const FileRouter = Router();
  * Routes
  */
 FileRouter.post('/upload', upload.single("file"), uploadFile);
-FileRouter.get('/file/:id', genDownloadFile, genDownloadLink);
-FileRouter.post('/file/:id', genDownloadFile, genDownloadLink);
-FileRouter.get('/delete', deleteUploads);
-
+FileRouter
+    .get('/file/:id', genDownloadFile, genDownloadLink)
+    .post('/file/:id', genDownloadFile, genDownloadLink);
+    
 module.exports = FileRouter;

@@ -5,7 +5,9 @@
         <div>
             <p><%= message %></p> 
             <div>
-                <a href="<%= fileLink %>"> 🔗 <%= fileLink %></a>
+                <a id="share-link" href="<%= fileLink %>"><%= fileLink %></a>
+                <img id="clipboard" class="clipboard" src="/svg/icons8-copy-100.png" alt="">
+                <a id="share-btn" class="file-share__button" href="">Share</a>
             </div>
         </div>
     <% } %>
@@ -46,3 +48,4 @@
         </form>
     </div>
 </div>
+<script src="/js/index.js"></script>

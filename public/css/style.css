@@ -140,6 +140,16 @@ input[type="file"] {
     margin: 1rem;
 }
 
+.clipboard {
+    width: 5%;
+    transform: translateY(17%);
+}
+
+.clipboard:hover {
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
 .file-share__button{
     background-color: var(--accent-color);
     color: var(--background-color);
@@ -147,6 +157,7 @@ input[type="file"] {
     border-radius: 22px;
     padding: 1rem;
     font-size: 1.5rem;
+    text-align: center;
 }
 
 button {

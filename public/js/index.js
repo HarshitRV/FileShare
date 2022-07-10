@@ -17,10 +17,14 @@ if(url.includes('/upload')){
 
     shareBtn.addEventListener('click', async (e)=> {
         e.preventDefault();
-        try {
-            await navigator.share(shareData);
-        } catch (e) {
-            console.log(e);
+        if(navigator.canShare){
+            try{
+                await navigator.share(shareData);
+            }catch(err){
+                console.log(err);
+            }
+        } else {
+            alert('Your browser does not support the Share API');
         }
     });
 

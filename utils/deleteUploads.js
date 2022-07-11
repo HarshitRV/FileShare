@@ -4,7 +4,7 @@
 const fs = require("fs");
 
 /**
- * @description - This function is used to delte the uploads folder
+ * @description - This function is used to delete the uploads folder
  * if it exists.
  */
 const deleteUploads = () => {

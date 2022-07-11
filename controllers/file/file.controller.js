@@ -1,4 +1,9 @@
 /**
+ * Node modules.
+ */
+const fs = require("fs");
+
+/**
  * Model import.
  */
 const File = require("../../models/file.model");
@@ -102,3 +107,28 @@ module.exports.genDownloadLink = catchAsync(async (req, res, _ ) => {
     
     return res.download(downloadPath, originalname);
 });
+
+/**
+ * @description - This function is used to clear the uploads folder if it exists.
+ */
+module.exports.clearUploads = (req, res)=>{
+    if(fs.existsSync('./uploads')){
+        fs.rm('./uploads', { recursive: true }, (err)=>{
+            if(err) {
+                return res.send({
+                    message: "Error while deleting uploads folder",
+                });
+            }
+            else {
+                return res.send({
+                    message: "Uploads folder deleted",
+                });
+            }
+        });
+        
+    } else {
+        return res.send({
+            message: "Uploads folder does not exists",
+        });
+    }
+}

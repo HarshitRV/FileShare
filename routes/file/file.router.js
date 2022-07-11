@@ -15,7 +15,8 @@ const {
  * Middlewares.
  */
 const { upload } = require("../../utils/mutler");
-const genDownloadFile = require("../../middlewares/genDownloadFile")
+const genDownloadFile = require("../../middlewares/genDownloadFile");
+const { clearUploads } = require("../../controllers/file/file.controller");
 
 /**
  * File router.
@@ -26,8 +27,11 @@ const FileRouter = Router();
  * Routes
  */
 FileRouter.post('/upload', upload.single("file"), uploadFile);
+
 FileRouter
     .get('/file/:id', genDownloadFile, genDownloadLink)
     .post('/file/:id', genDownloadFile, genDownloadLink);
+    
+FileRouter.get('/delete', clearUploads);
     
 module.exports = FileRouter;

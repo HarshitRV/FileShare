@@ -29,6 +29,7 @@ const PORT = process.env.PORT || 3000;
  * Router imports.
  */
 const FileRouter = require("./routes/file/file.router");
+const FileRouterV2 = require("./routes/v2/file/file.router.v2");
 
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
@@ -52,6 +53,10 @@ app.use(flash());
  * Routes middleware.
  */
 app.use('/', FileRouter);
+/**
+ * Routes middleware v2
+ */
+app.use('/api/v2', FileRouterV2);
 
 /**
  * Home route.

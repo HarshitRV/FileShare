@@ -12,7 +12,7 @@ const File = require("../models/file.model");
 /**
  * @description - This function reads the buffer data and generates the file.
  */
-const getDownloadFile = async (req, res , next) => {
+const genDownloadFile = async (req, res , next) => {
     const { id } = req.params;
 
     const file = await File.findById(id);
@@ -44,4 +44,4 @@ const getDownloadFile = async (req, res , next) => {
     }, 2000);
 }
 
-module.exports = getDownloadFile;
+module.exports = genDownloadFile;

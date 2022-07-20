@@ -15,7 +15,8 @@ npm install
 ```
 
 2. Run the app in devlopment environment:
-- create ```dev.env``` file in root directory of the project with the following content:
+-  ```cd configs```
+- create ```dev.env``` file in the configs folder with the following content:
 ```touch dev.env```
 ```sh
 NODE_ENV=development

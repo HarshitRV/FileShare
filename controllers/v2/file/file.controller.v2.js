@@ -69,6 +69,7 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 
     const file = new File(fileData);
 
+    // Shortens the url.
     const fileLink = await getTinyUrl(
         process.env.ACCESS_TOKEN,
         `${origin}/api/v2/file/${file._id}`

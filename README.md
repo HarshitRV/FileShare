@@ -28,6 +28,9 @@ SIGN_COOKIE=<ANY SECRET KEY OF YOUR CHOICE>
 ```sh
 npm run devstart
 ```
+
+# Production api documentation
+## [READ DOCS](https://documenter.getpostman.com/view/14307277/UzQyr4C8)
 # Contributing
 - Read the [Code of Conduct](./docs/code-of-conduct.md) first.
 - Contibuting [guidelines](./docs/contributing/contributing.md)

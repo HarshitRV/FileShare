@@ -58,7 +58,8 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 
         return res.status(200).send({
             message: `File with name ${fileData.originalname} already exists`,
-            fileLink
+            longurl: `${origin}/api/v2/file/${existingFile._id}`,
+            shortUrl: fileLink
         });
     };
 
@@ -81,7 +82,8 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 
     return res.status(201).send({
         message: "Your file is uploaded",
-        link: fileLink,
+        longurl: `${origin}/api/v2/file/${file._id}`,
+        shortUrl: fileLink,
         protected: file.protected,
     });
 });

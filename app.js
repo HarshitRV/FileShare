@@ -40,7 +40,6 @@ if(process.env.NODE_ENV !== "test"){
     const session = require("express-session");
     const flash = require("connect-flash");
     const { sessionConfig } = require("./configs/config");
-    console.log("process.env.NODE_ENV", process.env.NODE_ENV);
     app.use(session(sessionConfig));
     app.use(flash());
     app.use(async (req, res, next)=>{
@@ -49,8 +48,6 @@ if(process.env.NODE_ENV !== "test"){
     next();
   });
 }
-
-
 
 /**
  * Routes middleware.

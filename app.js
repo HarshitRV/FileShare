@@ -5,8 +5,6 @@ const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
-const session = require("express-session");
-const flash = require("connect-flash");
 
 /**
  * Utils import.
@@ -20,15 +18,9 @@ const ServerError = require("./utils/ServerError");
 connectDB(process.env.MONGODB_URI);
 
 /**
- * Configs import
- */
-const { sessionConfig } = require("./configs/config");
-
-/**
  * Declarations.
  */
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 /**
  * Router imports.
@@ -43,16 +35,22 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(session(sessionConfig));
-app.use(flash());
-/**
- * Setting global variables
- */
- app.use(async (req, res, next)=>{
-  res.locals.success = req.flash("success");
-  res.locals.error = req.flash("error");
-  next();
-});
+if(process.env.NODE_ENV !== "test"){
+    // This is not required in api/v2
+    const session = require("express-session");
+    const flash = require("connect-flash");
+    const { sessionConfig } = require("./configs/config");
+    console.log("process.env.NODE_ENV", process.env.NODE_ENV);
+    app.use(session(sessionConfig));
+    app.use(flash());
+    app.use(async (req, res, next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+  });
+}
+
+
 
 /**
  * Routes middleware.

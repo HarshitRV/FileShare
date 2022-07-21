@@ -7,7 +7,7 @@
     "start": "node server.js",
     "devstart": "env-cmd -f ./configs/dev.env nodemon server.js",
     "prodstart": "env-cmd -f ./configs/prod.env nodemon server.js",
-    "test": "env-cmd -f ./configs/test.env jest --watchAll --runInBand --detectOpenHandles"
+    "test": "env-cmd -f ./configs/test.env jest --runInBand --detectOpenHandles"
   },
   "jest": {
     "testEnvironment": "node"

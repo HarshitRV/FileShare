@@ -18,7 +18,7 @@ jobs:
       matrix:
         node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-        mongodb-version: ['4.2', '4.4', '5.0']
+        mongodb-version: ['5.0']
 
     steps:
     - uses: actions/checkout@v3

@@ -1,7 +1,8 @@
 # Extra files
 playground/
 uploads/
-*.env
+dev.env
+prod.env
 .DS_Store
 # Logs
 logs

@@ -29,10 +29,7 @@ module.exports.createTestFile = async (testFileId) => {
         size: 4
     };
 
-    fileLink = await getTinyUrl(
-        process.env.ACCESS_TOKEN,
-        `${origin}/api/v2/file/${testFile._id}`
-    );
+  
 
     testFile.shortUrl = fileLink;
 
@@ -51,10 +48,6 @@ module.exports.createProtectedLink = async (testFileId2) => {
         protected: true
     };
 
-    fileLink = await getTinyUrl(
-        process.env.ACCESS_TOKEN,
-        `${origin}/api/v2/file/${testFile._id}`
-    );
 
     testFile.shortUrl = fileLink;
 

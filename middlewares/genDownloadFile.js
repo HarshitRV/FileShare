@@ -17,7 +17,9 @@ const genDownloadFile = async (req, res , next) => {
 
     const file = await File.findById(id);
 
-    if(!file) return res.status(404).send("File not found");
+    if(!file) return res.status(404).send({
+        message: "File not found"
+    });
 
     const fileExtension = file.originalname.split(".").pop();
 
@@ -30,13 +32,13 @@ const genDownloadFile = async (req, res , next) => {
         fs.mkdirSync('./uploads');
     }
 
-    if(!fs.existsSync(`./uploads/${file.originalname}.${fileExtension}`)){
-        const writeStream = fs.createWriteStream(`./uploads/${file.originalname}.${fileExtension}`);
+    if(!fs.existsSync(`./uploads/${file.originalname.split(".")[0]}.${fileExtension}`)){
+        const writeStream = fs.createWriteStream(`./uploads/${file.originalname.split(".")[0]}.${fileExtension}`);
         readable.pipe(writeStream);
     }
 
     req.file = file;
-    req.downloadPath = `./uploads/${file.originalname}.${fileExtension}`;
+    req.downloadPath = `./uploads/${file.originalname.split(".")[0]}.${fileExtension}`;
     req.originalname = file.originalname;
 
     setTimeout(()=>{

@@ -99,12 +99,12 @@ module.exports.genDownloadLinkV2 = catchAsync(async (req, res, _) => {
     } = req;
 
     if (file.password != null) {
-        if (req.body.password == null) {
+        if (req.query.password == null) {
             return res.status(400).send({
                 message: "Password is required to download this file"
             });
         } else {
-            const match = await file.checkPassword(req.body.password);
+            const match = await file.checkPassword(req.query.password);
             if (!match) {
                 return res.status(400).send({
                     message: "Password is incorrect"
@@ -113,19 +113,20 @@ module.exports.genDownloadLinkV2 = catchAsync(async (req, res, _) => {
 
             file.downloadCount += 1;
             await file.save();
-
+     
             setTimeout(deleteUploads, 5000);
 
-            return res.download(downloadPath, originalname);
+            return res.status(200).download(downloadPath, originalname);
         }
     }
 
     file.downloadCount += 1;
+   
     await file.save();
 
     setTimeout(deleteUploads, 5000);
 
-    return res.download(downloadPath, originalname);
+    return res.status(200).download(downloadPath, originalname);
 });
 
 /**

@@ -1,4 +1,4 @@
-# FileShare App
+# FileShare App ![CI](https://github.com/HarshitRV/FileShare/actions/workflows/node.js.yml/badge.svg)
 This NodeJS app let't you upload files and generate a link to download them.
 The generated links can be password protected as well.
 

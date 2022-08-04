@@ -2,7 +2,7 @@
 This NodeJS app let't you upload files and generate a link to download them.
 The generated links can be password protected as well.
 
-# Setting up the app locally
+# Setting up the app locally.
 ## Prerequisites
 - NodeJS v16.x
 - MongoDB v5.x  [Windows](https://medium.com/@LondonAppBrewery/how-to-download-install-mongodb-on-windows-4ee4b3493514) | [Mac](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x/)

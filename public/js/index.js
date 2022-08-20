@@ -29,7 +29,9 @@ if(url.includes('/upload')){
     });
 
     copyToClipboard.addEventListener('click', async ()=> {
-       await navigator.clipboard.writeText(shareLink.textContent);
-       alert('Copied to clipboard');
+        if(window.location.protocol != 'https:') return alert('HTTPS is required to copy to clipboard');
+        await navigator.clipboard.writeText(shareLink.textContent);
+        console.log(navigator.clipboard);
+        alert('Copied to clipboard');
     });
 }

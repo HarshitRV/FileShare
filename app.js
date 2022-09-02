@@ -68,6 +68,13 @@ app.route("/").get((req, res) => {
     });
 });
 
+app.route("/uptime").get((req, res) => {
+    res.status(200).send({
+        status: 200,
+        message: "Server is up and running"
+    });
+});
+
 /**
  * If none of the routes matches.
  */

@@ -5,6 +5,7 @@ const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
+const cors = require("cors");
 
 /**
  * Utils import.
@@ -35,63 +36,64 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));
-if(process.env.NODE_ENV !== "test"){
-    // This is not required in api/v2
-    const session = require("express-session");
-    const flash = require("connect-flash");
-    const { sessionConfig } = require("./configs/config");
-    app.use(session(sessionConfig));
-    app.use(flash());
-    app.use(async (req, res, next)=>{
-    res.locals.success = req.flash("success");
-    res.locals.error = req.flash("error");
-    next();
-  });
+app.use(cors());
+if (process.env.NODE_ENV !== "test") {
+	// This is not required in api/v2
+	const session = require("express-session");
+	const flash = require("connect-flash");
+	const { sessionConfig } = require("./configs/config");
+	app.use(session(sessionConfig));
+	app.use(flash());
+	app.use(async (req, res, next) => {
+		res.locals.success = req.flash("success");
+		res.locals.error = req.flash("error");
+		next();
+	});
 }
 
 /**
  * Routes middleware.
  */
-app.use('/', FileRouter);
+app.use("/", FileRouter);
 /**
  * Routes middleware v2
  */
-app.use('/api/v2', FileRouterV2);
+app.use("/api/v2", FileRouterV2);
 
 /**
  * Home route.
  */
 app.route("/").get((req, res) => {
-    res.render("home", {
-        message : null,
-        fileLink: null
-    });
+	res.render("home", {
+		message: null,
+		fileLink: null,
+	});
 });
 
 app.route("/uptime").get((req, res) => {
-    res.status(200).send({
-        status: 200,
-        message: "Server is up and running"
-    });
+	res.status(200).send({
+		status: 200,
+		message: "Server is up and running",
+	});
 });
 
 /**
  * If none of the routes matches.
  */
-app.all('*', (req, res, next)=>{
-    next(new ServerError('Page Not Found', 404));
-})
+app.all("*", (req, res, next) => {
+	next(new ServerError("Page Not Found", 404));
+});
 
 /**
  * Default error handling middleware.
  */
-app.use((err, req, res, next)=>{
-    const { status=500, message="Something went wrong", stack } = err;
-    res.status(status).send({err, message, stack});
-})
+app.use((err, req, res, next) => {
+	const { status = 500, message = "Something went wrong", stack } = err;
+	res.status(status).send({ err, message, stack });
+});
 
 /**
  * Method to start the server.
  */
 
-module.exports = app ;
+module.exports = app;

@@ -18,7 +18,7 @@ const deleteUploads = require("../../../utils/deleteUploads");
 /**
  * Globals.
  */
-const origin = process.env.NODE_ENV === "production" ? "https://hackerspace-fileshare.herokuapp.com" : "http://localhost:3000";
+const origin = process.env.NODE_ENV === "production" ? "https://fileshare-fikr.onrender.com" : "http://localhost:3000";
 
 /**
  * @description - This function is used to upload files.

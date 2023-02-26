@@ -5,6 +5,7 @@ const express = require("express");
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const morgan = require("morgan");
+const cors = require("cors");
 
 /**
  * Utils import.
@@ -32,6 +33,7 @@ const CryptRouterV1 = require("./routes/v1/crypt/crypt.router.v1");
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
+app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

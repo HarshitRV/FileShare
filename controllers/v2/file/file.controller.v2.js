@@ -30,8 +30,9 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 	const { password, uploadPin } = req.body;
 	const fileData = req.file;
 
-	console.log("req.file data: ", req.file);
-	console.log(typeof req.file.buffer);
+	console.log("req.file data: ", fileData);
+	console.log(typeof fileData.buffer);
+	console.log(fileData.buffer);
 
 	if (!fileData) {
 		return res.status(400).send({
@@ -76,13 +77,15 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 	const file = new File(fileData);
 
 	// Shortens the url.
-	// const fileLink = await getTinyUrl(
-	//     process.env.ACCESS_TOKEN,
-	//     `${origin}/api/v2/file/${file._id}`
-	// );
+	let fileLink = "";
+	if (process.env.NODE_ENV === "production") {
+		fileLink = await getTinyUrl(
+			process.env.ACCESS_TOKEN,
+			`${origin}/api/v2/file/${file._id}`
+		);
+		file.shortUrl = fileLink;
+	}
 
-	const fileLink = "test";
-	file.shortUrl = "test";
 	await file.save();
 
 	return res.status(201).send({

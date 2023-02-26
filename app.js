@@ -58,7 +58,7 @@ app.use("/", FileRouter);
  * Routes middleware v2
  */
 app.use("/api/v2", FileRouterV2);
-app.use("/api/v1", CryptRouterV1);
+app.use("/api/v1/crypt", CryptRouterV1);
 
 /**
  * Home route.

@@ -9,72 +9,75 @@ const bcrypt = require("bcrypt");
  * File schema.
  */
 const fileSchema = new Schema({
-    shortUrl: {
-        type: String
-    },
-    protected: {
-        type: Boolean,
-        default: false
-    },
-    fieldname: {
-        type: String
-    },
-    originalname: {
-        type: String,
-        required: true
-    },
-    encoding: {
-        type: String
-    },
-    mimetype: {
-        type: String
-    },
-    buffer: {
-        type: Buffer,
-        required: true
-    },
-    size: {
-        type: Number,
-        required: true
-    },
-    password: {
-        type: String
-    },
-    downloadCount: {
-        type: Number,
-        required: true,
-        default: 0
-    }
+	shortUrl: {
+		type: String,
+	},
+	protected: {
+		type: Boolean,
+		default: false,
+	},
+	fieldname: {
+		type: String,
+	},
+	originalname: {
+		type: String,
+		required: true,
+	},
+	encoding: {
+		type: String,
+	},
+	mimetype: {
+		type: String,
+	},
+	buffer: {
+		type: Buffer,
+		required: true,
+	},
+	size: {
+		type: Number,
+		required: true,
+	},
+	password: {
+		type: String,
+	},
+	downloadCount: {
+		type: Number,
+		required: true,
+		default: 0,
+	},
+	secretKey: {
+		type: Buffer,
+	},
 });
 
 /**
  * Before saving hash and salt the password if it has been modified.
  */
 fileSchema.pre("save", async function (next) {
-    try {
-        if(this.isModified("password")){
-            const hash = await bcrypt.hash(this.password, 8);
-            this.password = hash;
-        }
-        next();
-    } catch (err) {
-        next(err);
-    }
+	try {
+		if (this.isModified("password")) {
+			const hash = await bcrypt.hash(this.password, 8);
+			this.password = hash;
+		}
+		next();
+	} catch (err) {
+		next(err);
+	}
 });
 
 /**
  * Compare the hashed password with the password provided.
  */
 fileSchema.methods.checkPassword = function (password) {
-    const passwordHash = this.password;
-    return new Promise((resolve, reject) => {
-        bcrypt.compare(password, passwordHash, (err, same) => {
-        if (err) {
-            return reject(err);
-        }
-        resolve(same);
-        });
-    });
+	const passwordHash = this.password;
+	return new Promise((resolve, reject) => {
+		bcrypt.compare(password, passwordHash, (err, same) => {
+			if (err) {
+				return reject(err);
+			}
+			resolve(same);
+		});
+	});
 };
 
 const File = mongoose.model("File", fileSchema);

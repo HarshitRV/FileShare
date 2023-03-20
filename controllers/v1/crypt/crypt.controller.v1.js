@@ -31,7 +31,7 @@ const File = require("../../../models/file.model");
 const readFile = promisify(fs.readFile);
 const origin =
 	process.env.NODE_ENV === "production"
-		? "https://fileshare-fikr.onrender.com"
+		? "https://securesharedapp.onrender.com"
 		: "http://localhost:3000";
 
 /**
@@ -53,13 +53,12 @@ module.exports.createKeyPairs = catchAsync(async (req, res, next) => {
 	if (existingUser) {
 		return res.status(200).send({
 			message: "user already exists",
+			userExists: true,
 		});
 	}
 
 	const isKeysCreated = await genKeyPairs();
 	if (isKeysCreated) {
-		// Now associate it with the user
-		//
 		let privateKey, publicKey;
 		if (fs.existsSync("./openssl")) {
 			[privateKey, publicKey] = await Promise.all([
@@ -69,46 +68,34 @@ module.exports.createKeyPairs = catchAsync(async (req, res, next) => {
 		}
 
 		const publicAddress = req.query.publicAddress;
-		console.log("publicAddress: ", publicAddress);
+
 		const secretKey = randomKeyGen();
 		const keys = {
-			publicKey,
-			privateKey,
-			secretKey,
+			publicKey: publicKey.toString("utf-8"),
+			privateKey: privateKey.toString("utf-8"),
+			aesKey: secretKey,
 		};
-		console.log("keys: ", keys);
+
+		// this will be changes to store only the public
+		// key of the new user
 		const user = new User({
 			publicAddress,
 			keys,
 		});
-
-		console.log("user", user);
-
 		await user.save();
 
-		//* Note: This should be in seperate controller.
-		// console.log("Private Key: ", privateKey.toString("utf-8"));
-		// console.log("Public Key: ", publicKey.toString("utf-8"));
-
-		// const textToEncrypt = "hello";
-		// const encryptedData = encryptData(
-		// 	textToEncrypt,
-		// 	publicKey.toString("utf-8")
-		// );
-		// const decryptedData = decryptData(
-		// 	encryptedData,
-		// 	privateKey.toString("utf-8")
-		// );
-
-		// console.log(encryptedData);
-		// console.log(decryptedData.toString('utf-8'));
-		//* -----------------------------------------------------------
 		// TODO
-		// 1. Now the openssl directory should be deleted
-		//    Also it should be created seperately in some other folder
-		//    based on the user public key.
+		// 1. Now the openssl directory should be deleted ✅
+		if (fs.existsSync("./openssl")) {
+			fs.rm("./openssl", { recursive: true }, (err) => {
+				if (err) console.error(err);
+			});
+		}
+		// 2. Also it should be created seperately in some other folder based on the user public key.
+
 		return res.status(201).send({
-			message: "keys created and registered new user",
+			message: "successfully created keys",
+			keys,
 		});
 	}
 	return res.status(500).send({
@@ -228,4 +215,32 @@ module.exports.downloadFile = catchAsync(async (req, res, next) => {
 	await file.save();
 	setTimeout(deleteUploads, 5000);
 	return res.status(200).download(downloadPath, originalname);
+});
+
+/**
+ * @description Deletes the user if it exists
+ */
+module.exports.deleteUser = catchAsync(async (req, res, next) => {
+	const { publicAddress } = req.query;
+
+	if (!publicAddress)
+		return res.status(400).send({
+			message: "invalid address or missing query string",
+		});
+
+	const existingUser = await User.findOne({
+		publicAddress: req.query.publicAddress,
+	});
+
+	if (!existingUser) {
+		return res.status(200).send({
+			message: "user doesn't exists",
+		});
+	}
+
+	await existingUser.remove();
+
+	return res.status(200).send({
+		message: "user deleted successfully",
+	});
 });

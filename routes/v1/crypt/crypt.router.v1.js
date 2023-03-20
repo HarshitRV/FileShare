@@ -21,6 +21,7 @@ const {
 	createKeyPairs,
 	encryptFile,
 	downloadFile,
+	deleteUser
 } = require("../../../controllers/v1/crypt/crypt.controller.v1");
 const { upload } = require("../../../utils/mutler");
 
@@ -32,5 +33,7 @@ CryptRouterV1.get("/create", createKeyPairs);
 CryptRouterV1.post("/upload", upload.single("file"), encryptFile);
 
 CryptRouterV1.post("/file/:id", decryptFileBuffer, genDownloadFile, downloadFile);
+
+CryptRouterV1.delete("/deleteUser", deleteUser);
 
 module.exports = CryptRouterV1;

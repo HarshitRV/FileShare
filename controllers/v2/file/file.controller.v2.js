@@ -79,6 +79,7 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 	// Shortens the url.
 	let fileLink = "";
 	if (process.env.NODE_ENV === "production") {
+        //! this was changed.
 		fileLink = await getTinyUrl(
 			process.env.ACCESS_TOKEN,
 			`${origin}/api/v2/file/${file._id}`

@@ -3,6 +3,7 @@ playground/
 uploads/
 dev.env
 prod.env
+multi.env
 .DS_Store
 # Logs
 logs

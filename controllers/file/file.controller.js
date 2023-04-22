@@ -57,6 +57,7 @@ module.exports.uploadFile = catchAsync(async (req, res, next) => {
 
 	const file = new File(fileData);
 
+    // need a try catch over here in case request to tinyurl fails
 	let fileLink = `${req.headers.origin}/file/${file._id}`;
 	if (process.env.NODE_ENV === "production") {
 		file.shortUrl = await getTinyUrl(
@@ -64,6 +65,7 @@ module.exports.uploadFile = catchAsync(async (req, res, next) => {
 			`${req.headers.origin}/file/${file._id}`
 		);
         fileLink = file.shortUrl;
+        file.longUrl = `${req.headers.origin}/file/${file._id}`;
 	} else {
 		file.longUrl = `${req.headers.origin}/file/${file._id}`;
 	}

@@ -1,51 +1,73 @@
 <% layout('layouts/boilerplate') %>
 
-<div id="container">
-    <% if(fileLink !=null){%>
-        <div>
-            <p><%= message %></p> 
+    <div id="container">
+        <% if(fileLink !=null){%>
             <div>
-                <a id="share-link" href="<%= fileLink %>"><%= fileLink %></a>
-                <img id="clipboard" class="clipboard" src="/svg/icons8-copy-100.png" alt="">
-                <a id="share-btn" class="file-share__button" href="">Share</a>
-            </div>
-        </div>
-    <% } %>
-    <div class="file-share">
-        <h1 class="file-share__heading">Welcome to fileshare 📁</h1>
-        <p>Supported file extensions pdf|doc|docx|txt|zip|pptx</p>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <div class="file-share__file">
-                <div class="file-share__file-label"><label for="file" id="file">File:</label></div>
-                <label class="custom-file-upload">
-                    <input type="file" name="file" id="file" required>
-                    <i class="fa fa-cloud-upload"></i> Custom Upload
-                </label>
-            </div>
-            <div class="file-share__password">
-                <div class="file-share__file-label">
-                    <label for="password">Password protect link
-                        <sup class="file-share--note">*password protect your link (optional)</sup>
-                    </label>
-                </div>
-                <div class="file-share__file-input">
-                    <input type="password" name="password" id="password" placeholder="optional password to password protect links">
+
+                <div class="box2">
+                    <div class="marginleft">
+                        <p class="text-light">
+                            <%= message %>
+                        </p>
+
+                        <a class="text-light text-decoration-none" id="share-link" href="<%= fileLink %>">
+                            <%= fileLink %>
+                        </a>
+                        <img id="clipboard" class="clipboard" src="/svg/icons8-copy-100.png" alt="">
+
+                        <a id="share-btn" class="but btn btn-danger  px-5 pt-2 pb-2" href="">Share</a>
+                    </div>
                 </div>
             </div>
-            <div class="file-share__password">
-                <div class="file-share__file-label">
-                    <label for="uploadPin">Enter Upload PIN
-                        <sup class="file-share--note">*required pin if files are larger than 1MB</sup>
-                    </label>
-                </div>
-                <div class="file-share__file-input">
-                    <input type="password" name="uploadPin" id="uploadPin" placeholder="required for file uplods larger than 1mb">
-                </div>
-            </div>
-            <div class="">
-                <button type="submit" class="file-share__button">Generate share link 🔗</button>
-            </div>
-        </form>
+            <% } %>
+                <!-- <div class="file-share"> -->
+                <!-- <h1 class="file-share__heading">Welcome to fileshare 📁</h1>
+                <p>Supported file extensions pdf|doc|docx|txt|zip|pptx</p> -->
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <!-- <div class="file-share__file">
+                        <div class="file-share__file-label"><label for="file" id="file">File:</label></div>
+                        <label class="custom-file-upload">
+                            <input type="file" name="file" id="file" required>
+                            <i class="fa fa-cloud-upload"></i> Custom Upload
+                        </label>
+                    </div> -->
+                    <!-- <div class="file-share__password">
+                        <div class="file-share__file-label">
+                            <label for="password">Password protect link
+                                <sup class="file-share--note">*password protect your link (optional)</sup>
+                            </label>
+                        </div>
+                        <div class="file-share__file-input">
+                            <input type="password" name="password" id="password" placeholder="optional password to password protect links">
+                        </div>
+                    </div> -->
+                    <!-- <div class="file-share__password">
+                        <div class="file-share__file-label">
+                            <label for="uploadPin">Enter Upload PIN
+                                <sup class="file-share--note">*required pin if files are larger than 1MB</sup>
+                            </label>
+                        </div>
+                        <div class="file-share__file-input">
+                            <input type="password" name="uploadPin" id="uploadPin" placeholder="required for file uplods larger than 1mb">
+                        </div>
+                    </div> -->
+                    <!-- <div class="">
+                        <button type="submit" class="file-share__button">Generate share link 🔗</button>
+                    </div> -->
+                    <div class="box d-flex justify-content-center">
+                        <div>
+                            <h1 class="head text-light">File Share App📁</h1>
+                            <input type="file" id="file" name="file" class="fl text-light mt-2 mb-4" required>
+                            <div class="inputbox">
+                                <input type="password" name="password" id="password">
+                                <span>Protect Link With Password</span>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 mt-4">Generate Link🔗</button>
+                        </div>
+                    </div>
+
+                </form>
     </div>
-</div>
-<script src="/js/index.js"></script>
+
+    </div>
+    <script src="/js/index.js"></script>

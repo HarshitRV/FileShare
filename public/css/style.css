@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-
-*/ *,
+/*
+*,
 *::before,
 *::after {
     margin: 0;
@@ -8,8 +8,10 @@
     box-sizing: border-box;
 }
 
+
 /* Remove default margin */
-body,
+/*
+ body,
 h1,
 h2,
 h3,
@@ -20,7 +22,7 @@ blockquote,
 dl,
 dd {
     margin: 0;
-}
+} 
 
 a {
     text-decoration: none;
@@ -37,7 +39,7 @@ a:hover {
     --background-color: #FAFAFA;
     --body-font-family: 'Bebas Neue', cursive;
     --light-grey: #EBEBEB;
-    --accent-color: #1363DF;
+    --accent-color: #df1346;
     --text-color: #06283D;
 }
 
@@ -50,9 +52,9 @@ input {
     outline: none;
     cursor: pointer;
     width: 100%;
-    /* padding: 10px 30px; */
-    box-sizing: border-box;
-}
+    padding: 10px 30px; 
+    box-sizing: border-box; 
+ } 
 
 
 body {
@@ -70,11 +72,13 @@ input[type="file"] {
 }
 .custom-file-upload {
     /* border: 1px solid #ccc; */
-    display: inline-block;
-    padding: 6px 12px;
+   /* display: inline-block; */
+   /* padding: 6px 12px;
     cursor: pointer;
     color: #000;
-}
+} */
+
+/*
 
 #container {
     width: 85%;
@@ -119,8 +123,9 @@ input[type="file"] {
     margin: 30px 0 30px 0;
     padding-left: 30px;
     /* font-size: 1rem; */
-}
+/* }  */
 
+/*
 .file-share__file, .file-share__password, .file-share__button{
     display: grid;
     margin: 1rem auto;
@@ -139,17 +144,18 @@ input[type="file"] {
     text-align: center;
     margin: 1rem;
 }
-
+*/
 .clipboard {
-    width: 5%;
+    width: 3%;
     transform: translateY(17%);
 }
+
 
 .clipboard:hover {
     cursor: pointer;
     transform: scale(1.1);
 }
-
+/*
 .file-share__button{
     background-color: var(--accent-color);
     color: var(--background-color);
@@ -160,6 +166,221 @@ input[type="file"] {
     text-align: center;
 }
 
+
 button {
     border-radius: 1px;
+} 
+
+*/
+
+
+/* Update Ui CSS */
+
+ body{
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/space.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    font-family: 'Roboto' sans-serif !important;
 }
+
+.box{
+    width: 65%;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(0,0,0,.7);
+}
+
+.box2{
+    font-size: calc(8px + (35 - 20) * (100vw - 320px) / (1920 - 320));
+    width: 65%;
+    padding: 20px;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(0,0,0,.7);
+}
+
+.box3{
+    font-size: calc(10px + (35 - 20) * (100vw - 320px) / (1920 - 320));
+    width: 45%;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: rgba(0,0,0,.7);
+}
+
+input::file-selector-button {
+    background-image: linear-gradient(
+      to right,
+      #ff7a18,
+      #af002d,
+      #319197 100%,
+      #319197 200%
+    );
+    background-position-x: 0%;
+    background-size: 200%;
+    border: 0;
+    border-radius: 8px;
+    color: #fff;
+    padding: 0.8rem 1rem;
+    text-shadow: 0 1px 1px #333;
+    transition: all 0.25s;
+  }
+  input::file-selector-button:hover {
+    background-position-x: 100%;
+    transform: scale(1.1);
+  }
+
+.head{
+    font-size: 6rem;
+    width: 100%;
+}
+
+.fl{
+    font-size: 1rem;
+}
+.txt{
+    width: 60%;
+}
+
+.inputbox{
+    position: relative;
+}
+
+.inputbox input{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgb(255,255,255,0.25);
+    background: black;
+    border-radius: 5px;
+    outline: none;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.inputbox span{
+    position: absolute;
+    left: 0;
+    padding: 8px;
+    pointer-events: none;
+    font-size: 1rem;
+    color:#fff;
+    text-transform: uppercase;
+    transition: .5s;
+    font-weight: 500;
+}
+
+.inputbox input:focus ~ span{
+    color : #fbf8f8;
+    transform: translateX(12px) translateY(-9px);
+    font-size: 0.8rem;
+    padding: 0 10px 0 0;
+    background: black;
+    font-weight: 500;
+    opacity: 0.7;
+ 
+} 
+
+.marginleft{
+    margin-left: 20%;
+}
+
+@media(max-width: 1300px){
+    .head{
+        font-size: 4rem;
+    }
+
+    .box2{
+        top: 10%;
+    }
+}
+
+/* Color Changing CSS */
+
+.awesome {
+      
+    font-family: Roboto;
+    font-weight: 500;
+    
+    width:100%;
+    
+    margin: 0 auto;
+    
+    color:#313131;
+    font-size: calc(40px + (35 - 20) * (100vw - 320px) / (1920 - 320));
+    font-weight: bold;
+    -webkit-animation:colorchange 20s infinite alternate;
+    
+    
+  }
+
+  @-webkit-keyframes colorchange {
+    0% {
+      
+      color: blue;
+    }
+    
+    10% {
+      
+      color: #8e44ad;
+    }
+    
+    20% {
+      
+      color: #1abc9c;
+    }
+    
+    30% {
+      
+      color: #d35400;
+    }
+    
+    40% {
+      
+      color: blue;
+    }
+    
+    50% {
+      
+      color: #34495e;
+    }
+    
+    60% {
+      
+      color: blue;
+    }
+    
+    70% {
+      
+      color: #2980b9;
+    }
+    80% {
+   
+      color: #f1c40f;
+    }
+    
+    90% {
+   
+      color: #2980b9;
+    }
+    
+    100% {
+      
+      color: pink;
+    }
+  }
+    
+/* Sublit Button */
+
+
+  

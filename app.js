@@ -96,4 +96,6 @@ app.use((err, req, res, next) => {
  * Method to start the server.
  */ 
 
+app.use('/css',express.static(path.join(__dirname,'node_modules','bootstrap','dist','css')));
+
 module.exports = app;

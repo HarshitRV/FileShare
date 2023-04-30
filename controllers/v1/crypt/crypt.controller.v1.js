@@ -69,11 +69,11 @@ module.exports.createKeyPairs = catchAsync(async (req, res, next) => {
 
 		const publicAddress = req.query.publicAddress;
 
-		const secretKey = randomKeyGen();
+		const aesKey = randomKeyGen();
 		const keys = {
 			publicKey: publicKey.toString("utf-8"),
 			privateKey: privateKey.toString("utf-8"),
-			aesKey: secretKey,
+			aesKey,
 		};
 
 		// this will be changed to store only the public
@@ -157,18 +157,13 @@ module.exports.encryptFile = catchAsync(async (req, res, next) => {
 	// TODO
 	// 1. encrypt the buffer of the file with the uploader
 	//    secret key
-	const uploaderSecretKey = uploader.keys.secretKey;
+	const uploaderAesKey = uploader.keys.aesKey;
 	const receiverPublicKey = receiver.keys.publicKey;
 
-	const encryptedBuffer = encryptBuffer(fileBuffer, uploaderSecretKey);
+	const encryptedBuffer = encryptBuffer(fileBuffer, uploaderAesKey);
 
 	// 2. encrypt the secret key with the recipient public key
-	const encryptedSecretKey = encryptData(uploaderSecretKey, receiverPublicKey);
-
-	const decryptedSecretKey = decryptData(
-		encryptedSecretKey,
-		receiver.keys.privateKey
-	);
+	const encryptedSecretKey = encryptData(uploaderAesKey, receiverPublicKey);
 
 	// 3. store the encrypted secret key along with the file
 	const file = new File({
@@ -176,14 +171,6 @@ module.exports.encryptFile = catchAsync(async (req, res, next) => {
 		buffer: encryptedBuffer,
 		secretKey: encryptedSecretKey,
 	});
-
-	// So when reciver receive the file along with secretKey
-	// he can decrypt the fileBuffer
-	// this will be in seperate controller
-	const decryptedBuffer = decryptBuffer(
-		encryptedBuffer,
-		decryptedSecretKey.toString("utf-8")
-	);
 
 	// Shortens the url.
 	let fileLink = "";

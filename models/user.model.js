@@ -17,7 +17,7 @@ const keysSchema = new Schema(
 			type: String,
 			trim: true,
 		},
-		secretKey: {
+		aesKey: {
 			type: String,
 			trim: true,
 		},

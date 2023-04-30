@@ -12,6 +12,9 @@ const fileSchema = new Schema({
 	shortUrl: {
 		type: String,
 	},
+	longUrl: {
+		type: String,
+	},
 	protected: {
 		type: Boolean,
 		default: false,

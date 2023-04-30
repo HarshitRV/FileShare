@@ -32,7 +32,7 @@ const readFile = promisify(fs.readFile);
 const origin =
 	process.env.NODE_ENV === "production"
 		? "https://securesharedapp.onrender.com"
-		: "http://localhost:3000";
+		: `http://localhost:${process.env.PORT}`;
 
 /**
  * @description - Generates public private key pairs
@@ -76,7 +76,7 @@ module.exports.createKeyPairs = catchAsync(async (req, res, next) => {
 			aesKey: secretKey,
 		};
 
-		// this will be changes to store only the public
+		// this will be changed to store only the public
 		// key of the new user
 		const user = new User({
 			publicAddress,
@@ -194,6 +194,7 @@ module.exports.encryptFile = catchAsync(async (req, res, next) => {
 		);
 		file.shortUrl = fileLink;
 	}
+	file.longUrl = `${origin}/api/v1/crypt/file/${file._id}`;
 
 	await file.save();
 

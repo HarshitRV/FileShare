@@ -363,4 +363,11 @@ input::file-selector-button:hover {
 	}
 }
 
+.count {
+	color: #ffffff;
+	background-color: black;
+	width: 5%;
+	text-align: center;
+}
+
 /* Sublit Button */

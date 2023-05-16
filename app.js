@@ -14,6 +14,11 @@ const connectDB = require("./utils/connectDB");
 const ServerError = require("./utils/ServerError");
 
 /**
+ * Model import.
+ */
+const LoadStats = require("./models/loadstats.model");
+
+/**
  * Connecting to database.
  */
 connectDB(process.env.MONGODB_URI);
@@ -35,8 +40,18 @@ app.set("views", path.join(__dirname, "/views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 app.use(cors());
+app.use(
+	express.static(
+		path.join(__dirname, "node_modules", "bootstrap", "dist", "css")
+	)
+);
+app.use((req, res, next) => {
+	console.log(req.headers.host);
+	next();
+});
+
 if (process.env.NODE_ENV !== "test") {
 	// This is not required in api/v2
 	const session = require("express-session");
@@ -77,6 +92,17 @@ app.route("/uptime").get((req, res) => {
 	});
 });
 
+app.route("/load").get(async (req, res) => {
+	const loadstat = await LoadStats.findOne({
+		hostname: req.headers.host,
+	});
+
+	return res.status(200).send({
+		activeUsers: loadstat.activeUsers,
+		maxLoad: loadstat.maxLoad,
+	});
+});
+
 /**
  * If none of the routes matches.
  */
@@ -91,11 +117,5 @@ app.use((err, req, res, next) => {
 	const { status = 500, message = "Something went wrong", stack } = err;
 	res.status(status).send({ err, message, stack });
 });
-
-/**
- * Method to start the server.
- */ 
-
-app.use('/css',express.static(path.join(__dirname,'node_modules','bootstrap','dist','css')));
 
 module.exports = app;

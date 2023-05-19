@@ -46,21 +46,21 @@ test("Should upload a file smaller than 1mb", async () => {
     expect(file.buffer).toEqual(expect.any(Buffer));
 }, 10000);
 
-test("Should not upload a file larger than 1mb without upload pin", async () => {
+test("Should not upload a file larger than 5mb without upload pin", async () => {
     await request(app)
     .post("/api/v2/upload")
-    .attach("file", "tests/fixtures/LargerThan1mb.pdf")
+    .attach("file", "tests/fixtures/FileLargerThan5mb.pdf")
     .expect(400)
 }, 10000);
 
-test("Should upload a file larger than 1mb with the upload pin", async () => {
+test("Should upload a file larger than 5mb with the upload pin", async () => {
     await request(app)
     .post("/api/v2/upload")
-    .attach("file", "tests/fixtures/LargerThan1mb.pdf")
+    .attach("file", "tests/fixtures/FileLargerThan5mb.pdf")
     .field({uploadPin: process.env.UPLOAD_PIN})
     .expect(201)
 
-    const file = await File.findOne({originalname: "LargerThan1mb.pdf"}); 
+    const file = await File.findOne({originalname: "FileLargerThan5mb.pdf"}); 
     expect(file.buffer).toEqual(expect.any(Buffer));
 }, 10000);
 

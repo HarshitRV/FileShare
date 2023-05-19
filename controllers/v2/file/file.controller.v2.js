@@ -57,7 +57,7 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 
 	if (existingFile) {
 		const fileLink = existingFile.shortUrl;
-        console.log(fileLink);
+		console.log(fileLink);
 		return res.status(200).send({
 			message: `File with name ${fileData.originalname} already exists`,
 			longurl: `${origin}/api/v2/file/${existingFile._id}`,
@@ -80,13 +80,13 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 			process.env.ACCESS_TOKEN,
 			`${origin}/api/v2/file/${file._id}`
 		);
-        file.shortUrl = fileLink;
+		file.shortUrl = fileLink;
 	} else {
-        // else use the localhost url
-        fileLink = `${origin}/api/v2/file/${file._id}`;
-        file.longUrl = fileLink;
-    }
-	
+		// else use the localhost url
+		fileLink = `${origin}/api/v2/file/${file._id}`;
+		file.longUrl = fileLink;
+	}
+
 	await file.save();
 
 	return res.status(201).send({

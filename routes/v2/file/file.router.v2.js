@@ -30,7 +30,7 @@
  
  FileRouterV2
      .get('/file/:id', genDownloadFile, genDownloadLinkV2)
-     .post('/file/:id', genDownloadFile, genDownloadLinkV2);
+     .post('/file/:id', genDownloadFile, genDownloadLinkV2); // for downloading password protected files
      
  FileRouterV2.get('/delete', clearUploads);
      

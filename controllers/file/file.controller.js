@@ -22,11 +22,11 @@ module.exports.uploadFile = catchAsync(async (req, res, next) => {
 	const { password, uploadPin } = req.body;
 	const fileData = req.file;
 
-	if (fileData.size > 1000000) {
+	if (fileData.size > 5000000) {
 		if (!uploadPin) {
 			req.flash(
 				"error",
-				"File size is too large. Upload pin is required to upload files greater than 1MB."
+				"File size is too large. Upload pin is required to upload files greater than 5MB."
 			);
 			return res.redirect("/");
 		}
@@ -53,6 +53,7 @@ module.exports.uploadFile = catchAsync(async (req, res, next) => {
 
 	if (password != null && password != "") {
 		fileData.password = password;
+		fileData.protected = true;
 	}
 
 	const file = new File(fileData);

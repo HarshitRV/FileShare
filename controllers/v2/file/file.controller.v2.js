@@ -57,7 +57,6 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 
 	if (existingFile) {
 		const fileLink = existingFile.shortUrl;
-		console.log(fileLink);
 		return res.status(200).send({
 			message: `File with name ${fileData.originalname} already exists`,
 			longurl: `${origin}/api/v2/file/${existingFile._id}`,
@@ -136,7 +135,33 @@ module.exports.genDownloadLinkV2 = catchAsync(async (req, res, _) => {
 });
 
 /**
- * @description - This function is used to clear the uploads folder if it exists.
+ * @description Gets file details.
+ */
+module.exports.getFileDetailsV2 = catchAsync(async (req, res) => {
+	const { id } = req.query;
+	if (!id) {
+		return res.status(400).send({
+			message: "Please provide file id",
+		});
+	}
+
+	// check if file exists.
+	const existingFile = await File.findById(id).select(
+		"protected encoding size downloadCount createdAt"
+	);
+	if (!existingFile) {
+		return res.status(400).send({
+			message: "File does not exists",
+		});
+	}
+
+	return res.status(200).send({
+		fileDetails: existingFile,
+	});
+});
+
+/**
+ * @description This function is used to clear the uploads folder if it exists.
  */
 module.exports.clearUploadsV2 = (req, res) => {
 	if (fs.existsSync("./uploads")) {

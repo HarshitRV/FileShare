@@ -38,6 +38,10 @@ const userSchema = new Schema(
 			trim: true,
 		},
 		keys: keysSchema,
+		registered: {
+			type: Boolean,
+			default: false,
+		},
 	},
 	{
 		timestamps: true,

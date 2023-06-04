@@ -5,7 +5,7 @@ const multerConfigs = {
         fileSize: 5000000
     },
     fileFilter(req, file, cb) {            
-        if (!file.originalname.match(/\.(pdf|doc|docx|txt|zip|pptx)$/)) {
+        if (!file.originalname.match(/\.(pdf|doc|docx|txt|zip|pptx|jpg|jpeg|png)$/)) {
             return cb(new Error("Supported file types are pdf, doc, docx and txt"));
         }
         cb(undefined, true);

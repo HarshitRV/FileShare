@@ -14,6 +14,7 @@ const {
 	decryptData,
 	encryptBuffer,
 	decryptBuffer,
+	hashKey,
 } = require("../../../utils/crypt/crypt");
 const { randomKeyGen } = require("../../../utils/randomKeyGen");
 const getTinyUrl = require("../../../utils/urlShortner");
@@ -50,10 +51,17 @@ module.exports.createKeyPairs = catchAsync(async (req, res, next) => {
 		publicAddress: req.query.publicAddress,
 	});
 
-	if (existingUser) {
+	if (existingUser && existingUser.registered) {
 		return res.status(200).send({
-			message: "user already exists",
+			message: "user already exists, and registered",
 			userExists: true,
+		});
+	}
+
+	if (existingUser && !existingUser.registered) {
+		return res.status(201).send({
+			message: "successfully retrived stored keys",
+			keys: existingUser.keys,
 		});
 	}
 
@@ -76,14 +84,18 @@ module.exports.createKeyPairs = catchAsync(async (req, res, next) => {
 			aesKey,
 		};
 
-		// this will be changed to store only the public
-		// key of the new user
-		const user = new User({
-			publicAddress,
-			keys,
-		});
-		await user.save();
-
+		if (existingUser) {
+			// updating the newly generated keys
+			existingUser.keys = keys;
+			await existingUser.save();
+		} else {
+			// creating new user
+			const user = new User({
+				publicAddress,
+				keys,
+			});
+			await user.save();
+		}
 		// TODO
 		// 1. Now the openssl directory should be deleted ✅
 		if (fs.existsSync("./openssl")) {
@@ -108,23 +120,25 @@ module.exports.createKeyPairs = catchAsync(async (req, res, next) => {
  */
 module.exports.encryptFile = catchAsync(async (req, res, next) => {
 	const { publicAddress, receiverAddress } = req.query;
+	const { senderAesKey: uploaderAesKey, receiverPublicKey } = req.body;
 	const fileData = req.file;
 	const fileBuffer = fileData.buffer;
+
+	console.log("file buffer: ", fileBuffer);
+	console.log("sender aes key: ", uploaderAesKey);
+	console.log("receiver public key: ", receiverPublicKey);
+
 
 	if (!publicAddress || !receiverAddress)
 		return res.status(400).send({
 			message: "Uploader and receiver wallet id is required",
 		});
 
-	const [uploader, receiver] = await Promise.all([
-		User.findOne({ publicAddress }),
-		User.findOne({ publicAddress: receiverAddress }),
-	]);
-
-	if (!uploader || !receiver)
+	if(!uploaderAesKey || !receiverPublicKey) {
 		return res.status(400).send({
-			message: "Uploader or receiver doesn't exists",
+			message: "Sender aes key and receiver public key is required",
 		});
+	}	
 
 	if (!fileData) {
 		return res.status(400).send({
@@ -132,9 +146,9 @@ module.exports.encryptFile = catchAsync(async (req, res, next) => {
 		});
 	}
 
-	if (fileData.size > 1000000) {
+	if (fileData.size > 5000000) {
 		return res.status(400).send({
-			message: "File smaller than 1mb is only allowed",
+			message: "File smaller than 5mb is only allowed",
 		});
 	}
 
@@ -157,9 +171,7 @@ module.exports.encryptFile = catchAsync(async (req, res, next) => {
 	// TODO
 	// 1. encrypt the buffer of the file with the uploader
 	//    secret key
-	const uploaderAesKey = uploader.keys.aesKey;
-	const receiverPublicKey = receiver.keys.publicKey;
-
+	
 	const encryptedBuffer = encryptBuffer(fileBuffer, uploaderAesKey);
 
 	// 2. encrypt the secret key with the recipient public key
@@ -172,9 +184,9 @@ module.exports.encryptFile = catchAsync(async (req, res, next) => {
 		secretKey: encryptedSecretKey,
 	});
 
-	// Shortens the url.
 	let fileLink = "";
 	if (process.env.NODE_ENV === "production") {
+		// shortens the ur
 		fileLink = await getTinyUrl(
 			process.env.ACCESS_TOKEN,
 			`${origin}/api/v1/crypt/file/${file._id}`
@@ -189,7 +201,72 @@ module.exports.encryptFile = catchAsync(async (req, res, next) => {
 		message: "Securely uploaded file",
 		longurl: `${origin}/api/v1/crypt/file/${file._id}`,
 		shortUrl: fileLink,
-		protected: file.protected,
+	});
+});
+
+/**
+ * @description Successfully registered user
+ */
+module.exports.registeredUser = catchAsync(async (req, res, next) => {
+	const { success, publicAddress } = req.query;
+
+	if (!success || !publicAddress)
+		return res.status(400).send({
+			message: "invalid address or missing query string",
+		});
+
+	const existingUser = await User.findOne({ publicAddress });
+
+	if (!existingUser) {
+		return res.status(200).send({
+			message: "user doesn't exists",
+			userExists: false,
+		});
+	}
+
+	existingUser.registered = success;
+	await existingUser.save();
+
+	return res.status(200).send({
+		message: "user registereat",
+		registered: success,
+	});
+});
+
+/**
+ * @description get user keys from db
+ */
+module.exports.getKeys = catchAsync(async (req, res, next) => {
+	const { publicAddress } = req.query;
+
+	if (!publicAddress)
+		return res.status(400).send({
+			message: "invalid address or missing query string",
+		});
+
+	// Check first is user already exists
+	const existingUser = await User.findOne({ publicAddress });
+
+	if (!existingUser) {
+		return res.status(200).send({
+			message: "user doesn't exists",
+			userExists: false,
+		});
+	}
+
+	const { publicKey, privateKey, aesKey } = existingUser.keys;
+
+	console.log(privateKey);
+
+	console.log("private key hash", hashKey(privateKey));
+
+	return res.status(200).send({
+		message: "successfully retrived stored keys",
+		keys: {
+			publicKey,
+			privateKey,
+			aesKey,
+		},
 	});
 });
 
@@ -231,4 +308,78 @@ module.exports.deleteUser = catchAsync(async (req, res, next) => {
 	return res.status(200).send({
 		message: "user deleted successfully",
 	});
+});
+
+/**
+ * Creates hash
+ */
+module.exports.createHash = catchAsync(async (req, res, next) => {
+	const { key } = req.body;
+
+	if (!key)
+		return res.status(400).send({
+			message: "invalid key",
+		});
+
+	const user = await User.findOne({ publicAddress: req.query.publicAddress });
+
+	const { privateKey } = user.keys;
+
+	const hash = hashKey(privateKey);
+
+	return res.status(200).send({
+		message: "hash created successfully",
+		hash,
+	});
+});
+
+
+/**
+ * @description Verify if file is meant to download for the user
+ */
+module.exports.verifyFile = catchAsync(async (req, res, next) => {
+	const { publicAddress: receiverAddress } = req.query;
+	const { id } = req.params;
+
+	if (!receiverAddress || !id)
+		return res.status(400).send({
+			message: "invalid address or missing query string",
+			verified: false,
+		});
+
+		const [receiver, file] = await Promise.all([
+			User.findOne({
+				publicAddress: receiverAddress,
+			}),
+			File.findById(id),
+		]);
+
+		if (!receiver || !file)
+			return res.status(400).send({
+				message: "Wallet or file id is invalid",
+				verified: false,
+			});
+
+		const receiverPrivateKey = receiver.keys.privateKey;
+
+		const encryptedSecretKey = file.secretKey;
+
+		try {
+			const decryptedSecretKey = decryptData(
+				encryptedSecretKey,
+				receiverPrivateKey
+			);
+			console.log("decryptedSecretKey", decryptedSecretKey.toString("utf-8"));
+			if(decryptedSecretKey) {
+				return res.status(200).send({
+					message: "authorized access",
+					verified: true,
+				});
+			}
+		} catch (e) {
+			return res.status(400).send({
+				message: "unauthorized access",
+				verified: false,
+			});
+		}
 });

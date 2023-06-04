@@ -21,19 +21,39 @@ const {
 	createKeyPairs,
 	encryptFile,
 	downloadFile,
-	deleteUser
+	deleteUser,
+	registeredUser,
+	getKeys,
+	createHash,
+	verifyFile,
 } = require("../../../controllers/v1/crypt/crypt.controller.v1");
 const { upload } = require("../../../utils/mutler");
 
 /**
  * Routes
  */
+// Create keys for user
 CryptRouterV1.get("/create", createKeyPairs);
 
+// Mark user as registered
+CryptRouterV1.get("/registered", registeredUser);
+
+// Get user keys
+CryptRouterV1.get("/getKeys", getKeys);
+
+// Create hash for keys
+CryptRouterV1.post('/createHash', createHash);
+
+// Upload file
 CryptRouterV1.post("/upload", upload.single("file"), encryptFile);
 
-CryptRouterV1.post("/file/:id", decryptFileBuffer, genDownloadFile, downloadFile);
+// Verify file
+CryptRouterV1.get("/verifyFile/:id", verifyFile);
 
+// Download file
+CryptRouterV1.get("/file/:id", decryptFileBuffer, genDownloadFile, downloadFile);
+
+// Delete user
 CryptRouterV1.delete("/deleteUser", deleteUser);
 
 module.exports = CryptRouterV1;

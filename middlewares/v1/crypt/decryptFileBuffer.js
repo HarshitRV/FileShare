@@ -31,12 +31,23 @@ const decryptFileBuffer = async (req, res, next) => {
 
 		const encryptedFileBuffer = file.buffer;
 		const receiverPrivateKey = receiver.keys.privateKey;
+
 		const encryptedSecretKey = file.secretKey;
 
-		const decryptedSecretKey = decryptData(
-			encryptedSecretKey,
-			receiverPrivateKey
-		);
+		let decryptedSecretKey
+		try {
+			decryptedSecretKey = decryptData(
+				encryptedSecretKey,
+				receiverPrivateKey
+			);
+		} catch (e) {
+			return res.status(400).send({
+				message: "unauthorized to access",
+			});
+		}
+		
+
+		console.log("decryptedSecretKey", decryptedSecretKey.toString("utf-8"));
 
 		const decryptedBuffer = decryptBuffer(
 			encryptedFileBuffer,

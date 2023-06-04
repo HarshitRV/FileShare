@@ -134,11 +134,23 @@ module.exports.encryptFile = catchAsync(async (req, res, next) => {
 			message: "Uploader and receiver wallet id is required",
 		});
 
-	if(!uploaderAesKey || !receiverPublicKey) {
-		return res.status(400).send({
-			message: "Sender aes key and receiver public key is required",
-		});
-	}	
+	const [uploader, receiver] = await Promise.all([
+		User.findOne({
+			publicAddress,
+		}),
+		User.findOne({
+			publicAddress: receiverAddress,
+		}),
+	]);
+
+	console.log(receiver);
+
+	//! Will be used in future
+	// if(!uploaderAesKey || !receiverPublicKey) {
+	// 	return res.status(400).send({
+	// 		message: "Sender aes key and receiver public key is required",
+	// 	});
+	// }	
 
 	if (!fileData) {
 		return res.status(400).send({
@@ -171,11 +183,13 @@ module.exports.encryptFile = catchAsync(async (req, res, next) => {
 	// TODO
 	// 1. encrypt the buffer of the file with the uploader
 	//    secret key
-	
-	const encryptedBuffer = encryptBuffer(fileBuffer, uploaderAesKey);
+	console.log(uploader.keys.aesKey);
+	const encryptedBuffer = encryptBuffer(fileBuffer, uploader.keys.aesKey);
 
 	// 2. encrypt the secret key with the recipient public key
-	const encryptedSecretKey = encryptData(uploaderAesKey, receiverPublicKey);
+	console.log(receiver.keys.publicKey);
+
+	const encryptedSecretKey = encryptData(uploader.keys.aesKey, receiver.keys.publicKey);
 
 	// 3. store the encrypted secret key along with the file
 	const file = new File({

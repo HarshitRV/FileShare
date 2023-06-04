@@ -32,6 +32,8 @@ const decryptFileBuffer = async (req, res, next) => {
 		const encryptedFileBuffer = file.buffer;
 		const receiverPrivateKey = receiver.keys.privateKey;
 
+		console.log("reciever private key", receiverPrivateKey);
+
 		const encryptedSecretKey = file.secretKey;
 
 		let decryptedSecretKey

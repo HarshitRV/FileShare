@@ -26,7 +26,7 @@ module.exports.uploadFile = catchAsync(async (req, res, next) => {
 		if (!uploadPin) {
 			req.flash(
 				"error",
-				"File size is too large. Upload pin is required to upload files greater than 5MB."
+				"File size is too large. Upload pin is required to upload files greater than 5mb."
 			);
 			return res.redirect("/");
 		}

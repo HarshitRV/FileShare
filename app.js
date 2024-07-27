@@ -37,19 +37,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
-if (process.env.NODE_ENV !== "test") {
-	// This is not required in api/v2
-	const session = require("express-session");
-	const flash = require("connect-flash");
-	const { sessionConfig } = require("./configs/config");
-	app.use(session(sessionConfig));
-	app.use(flash());
-	app.use(async (req, res, next) => {
-		res.locals.success = req.flash("success");
-		res.locals.error = req.flash("error");
-		next();
-	});
-}
 
 /**
  * Routes middleware.
@@ -94,8 +81,13 @@ app.use((err, req, res, next) => {
 
 /**
  * Method to start the server.
- */ 
+ */
 
-app.use('/css',express.static(path.join(__dirname,'node_modules','bootstrap','dist','css')));
+app.use(
+	"/css",
+	express.static(
+		path.join(__dirname, "node_modules", "bootstrap", "dist", "css")
+	)
+);
 
 module.exports = app;

@@ -1,0 +1,19 @@
+{
+	"version": "0.0.1",
+	"configurations": [
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "file share api",
+			"skipFiles": ["<node_internals>/**"],
+			"program": "${workspaceFolder}/server.js",
+			"env": {
+				"PORT": "3003",
+				"MONGODB_URI": "mongodb://localhost:27017/filesDB",
+				"ACCESS_TOKEN": "jccrex9W3zDnTiJWgc2P4pmlX9UuvVMBjrGIMemc7jNuNTuLcD9toQtHbf0p",
+				"UPLOAD_PIN": "123",
+				"NODE_ENV": "debug"
+			}
+		}
+	]
+}

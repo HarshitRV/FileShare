@@ -16,43 +16,37 @@ const getTinyUrl = require("../../../utils/urlShortner");
 const deleteUploads = require("../../../utils/deleteUploads");
 
 /**
- * Globals.
- */
-const origin =
-	process.env.NODE_ENV === "production"
-		? "https://fileshare-fikr.onrender.com"
-		: "http://localhost:3000";
-
-/**
  * @description - This function is used to upload files.
  */
 module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
+	const origin = `${req.protocol}://${req.get("host")}`;
+
 	const { password, uploadPin } = req.body;
 	const fileData = req.file;
 
 	if (!fileData) {
 		return res.status(400).send({
-			message: "No file found. Please upload a file",
+			message: "No file found. Please upload a file.",
 		});
 	}
 
 	if (fileData.size > 5000000) {
 		if (!uploadPin) {
 			return res.status(400).send({
-				message: "Upload PIN required for files larger than 5Mb",
+				message: "Upload PIN required for files larger than 5Mb.",
 			});
 		}
 
 		if (uploadPin !== process.env.UPLOAD_PIN) {
 			return res.status(400).send({
-				message: "Upload PIN required for files larger than 5Mb",
+				message: "Invalid upload PIN.",
 			});
 		}
 	}
 
 	// Check if file is already exists.
 	const existingFile = await File.findOne({
-		originalname: fileData.originalname,
+		buffer: fileData.buffer,
 	});
 
 	if (existingFile) {
@@ -64,7 +58,7 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 		});
 	}
 
-	if (password != null && password != "") {
+	if (password) {
 		fileData.password = password;
 		fileData.protected = true;
 	}
@@ -101,37 +95,38 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
  *
  */
 module.exports.genDownloadLinkV2 = catchAsync(async (req, res, _) => {
-	const { file, downloadPath, originalname } = req;
+	const { id } = req.params;
+	const file = await File.findById(id);
 
-	if (file.password != null) {
-		if (req.query.password == null) {
+	if (!file)
+		return res.status(404).send({
+			message: "File not found",
+		});
+
+	if (file.password) {
+		if (!req.query.password) {
 			return res.status(400).send({
 				message: "Password is required to download this file",
 			});
-		} else {
-			const match = await file.checkPassword(req.query.password);
-			if (!match) {
-				return res.status(400).send({
-					message: "Password is incorrect",
-				});
-			}
+		}
 
-			file.downloadCount += 1;
-			await file.save();
-
-			setTimeout(deleteUploads, 5000);
-
-			return res.status(200).download(downloadPath, originalname);
+		const match = await file.checkPassword(req.query.password);
+		if (!match) {
+			return res.status(400).send({
+				message: "Password is incorrect",
+			});
 		}
 	}
 
 	file.downloadCount += 1;
-
 	await file.save();
 
-	setTimeout(deleteUploads, 5000);
-
-	return res.status(200).download(downloadPath, originalname);
+	res.setHeader(
+		"Content-Disposition",
+		`attachment; filename="${file.originalname}"`
+	);
+	res.setHeader("Content-Type", file.mimetype);
+	res.send(file.buffer);
 });
 
 /**

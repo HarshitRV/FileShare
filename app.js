@@ -51,9 +51,9 @@ app.use("/api/v2", FileRouterV2);
  * Home route.
  */
 app.route("/").get((req, res) => {
-	res.render("home", {
-		message: null,
-		fileLink: null,
+	res.status(200).send({
+		status: 200,
+		message: "rapidshareappapi is running 🔥",
 	});
 });
 

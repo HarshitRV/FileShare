@@ -9,7 +9,7 @@ const { Router } = require("express");
 const {
 	uploadFileV2,
 	genDownloadLinkV2,
-    getFileDetailsV2
+	getFileDetailsV2,
 } = require("../../../controllers/v2/file/file.controller.v2");
 
 /**
@@ -27,6 +27,13 @@ const FileRouterV2 = Router();
 /**
  * Routes
  */
+FileRouterV2.get("/status", async (req, res) => {
+	res.status(200).send({
+		status: 200,
+		message: "rapidshareappapi is running 🔥",
+	});
+});
+
 FileRouterV2.post("/upload", upload.single("file"), uploadFileV2);
 
 FileRouterV2.get("/file", getFileDetailsV2);

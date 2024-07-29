@@ -13,7 +13,6 @@ const File = require("../../../models/file.model");
  */
 const catchAsync = require("../../../utils/catchAsync");
 const getTinyUrl = require("../../../utils/urlShortner");
-const deleteUploads = require("../../../utils/deleteUploads");
 /**
  * Constants
  */
@@ -59,7 +58,7 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 		return res.status(200).send({
 			message: `File with name ${fileData.originalname} already exists`,
 			longurl: `${origin}/api/v2/file/${existingFile._id}`,
-			shortUrl: fileLink,
+			shorturl: fileLink,
 			existingFile: true,
 			isProtected: existingFile.protected,
 		});
@@ -92,7 +91,7 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 	return res.status(201).send({
 		message: "Your file is uploaded",
 		longurl: `${origin}/api/v2/file/${file._id}`,
-		shortUrl: fileLink,
+		shorturl: fileLink,
 		isProtected: file.protected,
 		existingFile: false,
 	});

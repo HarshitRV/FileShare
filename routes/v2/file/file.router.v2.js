@@ -31,6 +31,7 @@ FileRouterV2.get("/status", async (req, res) => {
 	res.status(200).send({
 		status: 200,
 		message: "rapidshareappapi is running 🔥",
+		env: process.env.NODE_ENV,
 	});
 });
 

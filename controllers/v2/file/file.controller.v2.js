@@ -14,6 +14,10 @@ const File = require("../../../models/file.model");
 const catchAsync = require("../../../utils/catchAsync");
 const getTinyUrl = require("../../../utils/urlShortner");
 const deleteUploads = require("../../../utils/deleteUploads");
+/**
+ * Constants
+ */
+const { MAX_FILE_SIZE } = require("../../../constants/constants");
 
 /**
  * @description - This function is used to upload files.
@@ -30,7 +34,7 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 		});
 	}
 
-	if (fileData.size > 5000000) {
+	if (fileData.size > MAX_FILE_SIZE) {
 		if (!uploadPin) {
 			return res.status(400).send({
 				message: "Upload PIN required for files larger than 5Mb.",
@@ -50,11 +54,14 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 	});
 
 	if (existingFile) {
-		const fileLink = existingFile.shortUrl;
+		const fileLink =
+			existingFile.shortUrl || `${origin}/api/v2/file/${existingFile._id}`;
 		return res.status(200).send({
 			message: `File with name ${fileData.originalname} already exists`,
 			longurl: `${origin}/api/v2/file/${existingFile._id}`,
 			shortUrl: fileLink,
+			existingFile: true,
+			isProtected: existingFile.protected,
 		});
 	}
 
@@ -86,7 +93,8 @@ module.exports.uploadFileV2 = catchAsync(async (req, res, next) => {
 		message: "Your file is uploaded",
 		longurl: `${origin}/api/v2/file/${file._id}`,
 		shortUrl: fileLink,
-		protected: file.protected,
+		isProtected: file.protected,
+		existingFile: false,
 	});
 });
 

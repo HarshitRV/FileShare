@@ -4,10 +4,10 @@
   "description": "This web app lets users to upload files and share with others.The files can be password protected.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "env-cmd -f ./configs/dev.env nodemon server.js",
-    "prod": "env-cmd -f ./configs/prod.env nodemon server.js",
-    "multi": "env-cmd -f ./configs/multi.env nodemon server.js",
+    "start": "bun server.js",
+    "dev": "env-cmd -f ./configs/dev.env bun server.js",
+    "prod": "env-cmd -f ./configs/prod.env bun server.js",
+    "multi": "env-cmd -f ./configs/multi.env bun server.js",
     "test": "env-cmd -f ./configs/test.env jest --runInBand --detectOpenHandles"
   },
   "jest": {
